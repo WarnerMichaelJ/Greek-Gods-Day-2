@@ -3,7 +3,7 @@ const models = require("./models");
 const expressGraphQL = require("express-graphql");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const db = require("../keys/secret.js").MONGO_URI;
+const db = require("../config/keys").MONGO_URI;
 const schema = require("./schema/schema");
 
 const app = express();
@@ -28,5 +28,13 @@ app.use(
     graphiql: true
   })
 );
+
+app.use(express.static('public'));
+
+const webpackMiddleware = require("webpack-dev-middleware");
+const webpack = require("webpack");
+const webpackConfig = require("../webpack.config.js");
+
+app.use(webpackMiddleware(webpack(webpackConfig)));
 
 module.exports = app;
